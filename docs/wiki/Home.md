@@ -1,6 +1,6 @@
 # SampleWiki
 
-ChatGPTからGitHub Wikiを読み書きするための検証用Wikiです。
+ChatGPTからGitHub Wikiを読み書きするための検証用Wikiである。
 
 ## 目的
 
@@ -18,6 +18,6 @@ ChatGPTからGitHub Wikiを読み書きするための検証用Wikiです。
 
 ## 編集方式
 
-このWikiの原本は通常リポジトリ内の `docs/wiki` ディレクトリです。
+このWikiの原本は通常リポジトリ内の `docs/wiki` ディレクトリである。
 
-`main` ブランチへ変更がpushされると、[[GitHub Actions]]がWikiリポジトリへ同期します。
+`main` ブランチへ変更がpushされると、[[GitHub Actions]]がWikiリポジトリへ同期する。
