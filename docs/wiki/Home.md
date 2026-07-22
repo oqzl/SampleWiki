@@ -14,6 +14,7 @@ ChatGPTからGitHub Wikiを読み書きするための検証用Wikiです。
 - [[WikiベースSNS]]
 - [[運用ルール]]
 - [[ChatGPT連携]]
+- [[石川の趣味]]
 
 ## 編集方式
 
