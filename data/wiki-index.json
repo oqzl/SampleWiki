@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "source": "docs/wiki/**/*.md",
-  "pageCount": 42,
+  "pageCount": 43,
   "pages": [
     {
       "title": "App Store審査",
@@ -337,6 +337,57 @@
         }
       ],
       "missingLinks": []
+    },
+    {
+      "title": "Wikiリンク",
+      "path": "docs/wiki/software/wiki/Wikiリンク.md",
+      "category": "software/wiki",
+      "content": "# Wikiリンク\n\nWikiリンクは、ページ名を指定してWiki内の別ページへ接続するリンク記法である。\n\nSampleWikiでは `[[ページ名]]` を基本形とし、表示名を変える場合は `[[ページ名|表示名]]` を使う。\n\n## 役割\n\n通常のURLを直接書く方式と異なり、ページ名を知識の識別子として扱える。リンク先がまだ存在しない場合でも記述できるため、後からページを作成して知識ネットワークを拡張できる。\n\n一方、未作成リンクを無制限に増やすとWikiが収束しない。下位概念や同義語は独立ページにせず、既存ページの節へ統合する判断も必要である。\n\n## 関連ページ\n\n- [[ページ間リンク]]\n- [[バックリンク]]\n- [[運用ルール]]\n- [[Markdown]]\n",
+      "contentHash": "f3bb6893620e83829b649b8f1346f9b2c55376edf4431d21dc9dbaf67b232944",
+      "headings": [
+        {
+          "level": 1,
+          "text": "Wikiリンク"
+        },
+        {
+          "level": 2,
+          "text": "役割"
+        },
+        {
+          "level": 2,
+          "text": "関連ページ"
+        }
+      ],
+      "links": [
+        {
+          "target": "ページ名",
+          "label": "ページ名"
+        },
+        {
+          "target": "表示名",
+          "label": "ページ名"
+        },
+        {
+          "target": "ページ間リンク",
+          "label": "ページ間リンク"
+        },
+        {
+          "target": "バックリンク",
+          "label": "バックリンク"
+        },
+        {
+          "target": "運用ルール",
+          "label": "運用ルール"
+        },
+        {
+          "target": "Markdown",
+          "label": "Markdown"
+        }
+      ],
+      "missingLinks": [
+        "ページ名",
+        "表示名"
+      ]
     },
     {
       "title": "アドベントカレンダー",
@@ -2720,7 +2771,6 @@
         }
       ],
       "missingLinks": [
-        "Wikiリンク",
         "ページ名"
       ]
     },
@@ -2893,6 +2943,7 @@
       "GitHub Actions",
       "iOSアプリ制作",
       "SampleWiki",
+      "Wikiリンク",
       "ページ分類"
     ],
     "WikiベースSNS": [
@@ -2906,6 +2957,9 @@
       "ローグライクSNS",
       "ローグライクWiki",
       "実験的UI"
+    ],
+    "Wikiリンク": [
+      "運用ルール"
     ],
     "アドベントカレンダー": [
       "WikiベースSNS",
@@ -2950,6 +3004,7 @@
     ],
     "バックリンク": [
       "WikiベースSNS",
+      "Wikiリンク",
       "ページ分類",
       "ページ間リンク",
       "ローグライクSNS",
@@ -2979,6 +3034,7 @@
       "ボードゲーム制作"
     ],
     "ページ間リンク": [
+      "Wikiリンク",
       "バックリンク",
       "ページ分類",
       "ローグライクWiki"
@@ -3099,6 +3155,7 @@
     "運用ルール": [
       "SampleWiki",
       "WikiベースSNS",
+      "Wikiリンク",
       "ページ分類",
       "ページ間リンク"
     ],
