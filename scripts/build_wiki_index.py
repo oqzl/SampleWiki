@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build a deterministic JSON index from docs/wiki/*.md."""
+"""Build a deterministic JSON index from hierarchical docs/wiki/**/*.md."""
 
 from __future__ import annotations
 
 import hashlib
 import json
 import re
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,8 +42,16 @@ def extract_links(content: str) -> list[dict[str, str]]:
     return links
 
 
+def category_for(path: Path) -> str:
+    relative = path.relative_to(WIKI_DIR)
+    return relative.parent.as_posix() if relative.parent != Path(".") else "root"
+
+
 def main() -> None:
-    paths = sorted(WIKI_DIR.glob("*.md"), key=lambda p: p.name.casefold())
+    paths = sorted(
+        WIKI_DIR.rglob("*.md"),
+        key=lambda p: p.relative_to(WIKI_DIR).as_posix().casefold(),
+    )
     raw_pages: list[dict[str, object]] = []
 
     for path in paths:
@@ -52,11 +61,33 @@ def main() -> None:
             {
                 "title": title,
                 "path": path.relative_to(ROOT).as_posix(),
+                "category": category_for(path),
                 "content": content,
                 "contentHash": hashlib.sha256(content.encode("utf-8")).hexdigest(),
                 "headings": extract_headings(content),
                 "links": extract_links(content),
             }
+        )
+
+    title_counts = Counter(str(page["title"]) for page in raw_pages)
+    duplicate_titles = sorted(
+        (title for title, count in title_counts.items() if count > 1),
+        key=str.casefold,
+    )
+    if duplicate_titles:
+        raise SystemExit(
+            "Duplicate Wiki page titles are not allowed: " + ", ".join(duplicate_titles)
+        )
+
+    filename_counts = Counter(Path(str(page["path"])).name for page in raw_pages)
+    duplicate_filenames = sorted(
+        (name for name, count in filename_counts.items() if count > 1),
+        key=str.casefold,
+    )
+    if duplicate_filenames:
+        raise SystemExit(
+            "Duplicate Wiki filenames cannot be flattened for GitHub Wiki: "
+            + ", ".join(duplicate_filenames)
         )
 
     existing_titles = {str(page["title"]) for page in raw_pages}
@@ -92,8 +123,8 @@ def main() -> None:
     }
 
     index = {
-        "schemaVersion": 1,
-        "source": "docs/wiki/*.md",
+        "schemaVersion": 2,
+        "source": "docs/wiki/**/*.md",
         "pageCount": len(pages),
         "pages": pages,
         "backlinks": normalized_backlinks,
