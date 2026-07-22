@@ -1,0 +1,42 @@
+name: Reorganize Wiki
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/reorganize_wiki.py"
+      - ".github/workflows/reorganize-wiki.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  reorganize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reorganize Wiki pages
+        run: python3 scripts/reorganize_wiki.py
+
+      - name: Rebuild Wiki index
+        run: python3 scripts/build_wiki_index.py
+
+      - name: Validate JSON index
+        run: python3 -m json.tool data/wiki-index.json > /dev/null
+
+      - name: Commit hierarchy
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/wiki data/wiki-index.json
+          if git diff --cached --quiet; then
+            echo "Wiki hierarchy is already up to date"
+            exit 0
+          fi
+          git commit -m "Reorganize Wiki into ontology folders"
+          git push
