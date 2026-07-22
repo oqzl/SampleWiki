@@ -18,27 +18,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate and flatten Wiki sources
+      - name: Validate Wiki hierarchy
         run: |
           python3 - <<'PY'
           from pathlib import Path
           from collections import Counter
-          import shutil
 
-          source = Path("docs/wiki")
-          output = Path("wiki-export")
-          files = sorted(source.rglob("*.md"))
-          names = Counter(path.name for path in files)
+          files = sorted(Path("docs/wiki").rglob("*.md"))
+          names = Counter(path.name for path in files if not path.name.startswith("_"))
           duplicates = sorted(name for name, count in names.items() if count > 1)
           if duplicates:
               raise SystemExit(
-                  "Duplicate filenames cannot be flattened for GitHub Wiki: "
+                  "GitHub Wiki uses a global page namespace; duplicate filenames are forbidden: "
                   + ", ".join(duplicates)
               )
-
-          output.mkdir()
-          for path in files:
-              shutil.copy2(path, output / path.name)
           PY
 
       - name: Clone wiki
@@ -47,10 +40,10 @@ jobs:
         run: |
           git clone "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" wiki
 
-      - name: Replace wiki contents
+      - name: Replace wiki contents while preserving folders
         run: |
           find wiki -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-          cp wiki-export/*.md wiki/
+          cp -R docs/wiki/. wiki/
 
       - name: Commit and push
         working-directory: wiki
@@ -62,5 +55,5 @@ jobs:
             echo "No wiki changes"
             exit 0
           fi
-          git commit -m "Sync wiki from hierarchical docs/wiki sources"
+          git commit -m "Sync hierarchical wiki from docs/wiki"
           git push
