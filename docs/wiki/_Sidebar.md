@@ -1,6 +1,6 @@
 # ページ分類
 
-- [[SampleWiki]]
+- [[SampleWiki|Home]]
 
 ## ゲーム / デジタルゲーム
 
