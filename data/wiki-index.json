@@ -1172,9 +1172,7 @@
           "label": "酒豪伝説プレミアム"
         }
       ],
-      "missingLinks": [
-        "Home"
-      ]
+      "missingLinks": []
     },
     {
       "title": "ページ名",
@@ -3336,9 +3334,7 @@
           "label": "SampleWiki"
         }
       ],
-      "missingLinks": [
-        "Home"
-      ]
+      "missingLinks": []
     },
     {
       "title": "酒豪伝説プレミアム",
@@ -3564,6 +3560,10 @@
       "SampleWiki",
       "Wikiリンク",
       "ページ分類"
+    ],
+    "SampleWiki": [
+      "ページ分類",
+      "運用ルール"
     ],
     "WikiベースSNS": [
       "SampleWiki",
