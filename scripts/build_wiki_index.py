@@ -61,6 +61,7 @@ def main() -> None:
             {
                 "title": title,
                 "path": path.relative_to(ROOT).as_posix(),
+                "filename": path.stem,
                 "category": category_for(path),
                 "content": content,
                 "contentHash": hashlib.sha256(content.encode("utf-8")).hexdigest(),
@@ -79,7 +80,7 @@ def main() -> None:
             "Duplicate Wiki page titles are not allowed: " + ", ".join(duplicate_titles)
         )
 
-    filename_counts = Counter(Path(str(page["path"])).name for page in raw_pages)
+    filename_counts = Counter(str(page["filename"]) for page in raw_pages)
     duplicate_filenames = sorted(
         (name for name, count in filename_counts.items() if count > 1),
         key=str.casefold,
@@ -90,6 +91,14 @@ def main() -> None:
             + ", ".join(duplicate_filenames)
         )
 
+    title_by_alias: dict[str, str] = {}
+    for page in raw_pages:
+        title = str(page["title"])
+        filename = str(page["filename"])
+        title_by_alias[title] = title
+        title_by_alias[filename] = title
+
+    existing_names = set(title_by_alias)
     existing_titles = {str(page["title"]) for page in raw_pages}
     pages: list[dict[str, object]] = []
     backlinks: dict[str, list[str]] = {title: [] for title in existing_titles}
@@ -102,7 +111,7 @@ def main() -> None:
             {
                 str(link["target"])
                 for link in links
-                if isinstance(link, dict) and str(link["target"]) not in existing_titles
+                if isinstance(link, dict) and str(link["target"]) not in existing_names
             },
             key=str.casefold,
         )
@@ -110,10 +119,12 @@ def main() -> None:
             if not isinstance(link, dict):
                 continue
             target = str(link["target"])
-            if target in backlinks:
-                backlinks[target].append(source_title)
+            canonical_title = title_by_alias.get(target)
+            if canonical_title is not None:
+                backlinks[canonical_title].append(source_title)
 
-        pages.append({**page, "missingLinks": missing})
+        output_page = {key: value for key, value in page.items() if key != "filename"}
+        pages.append({**output_page, "missingLinks": missing})
 
     pages.sort(key=lambda page: str(page["title"]).casefold())
     normalized_backlinks = {
